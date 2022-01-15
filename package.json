@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend Project X",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "nodemon ./server/src/server.mjs",
+    "start:prod": "node ./server/src/server.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ydaetwyler/school.git#master"
+  },
+  "author": "Yves Dätwyler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ydaetwyler/school/issues"
+  },
+  "homepage": "https://github.com/ydaetwyler/school/tree/master#readme",
+  "dependencies": {
+    "@graphql-tools/schema": "^8.3.1",
+    "apollo-server-express": "^3.3.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "graphql": "^15.5.3",
+    "graphql-compose": "^9.0.3",
+    "graphql-compose-connection": "^8.2.1",
+    "graphql-compose-mongoose": "^9.6.0",
+    "graphql-middleware": "^6.1.6",
+    "graphql-subscriptions": "^2.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "md5": "^2.3.0",
+    "mongoose": "^6.0.6",
+    "nanoid": "^3.1.30",
+    "nodemailer": "^6.7.2",
+    "subscriptions-transport-ws": "^0.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
