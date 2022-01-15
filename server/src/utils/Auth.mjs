@@ -22,7 +22,7 @@ const Auth = async ({ req }) => {
     try {
         console.log(`req -> ${req}`)
         const userToken = req.cookies.userToken
-        console.lop(`userToken -> ${userToken}`)
+        console.log(`userToken -> ${userToken}`)
 
         if (!userToken) return { isAuth: false }
 
