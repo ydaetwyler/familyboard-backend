@@ -20,13 +20,17 @@ const validateUser = token => {
 
 const Auth = async ({ req }) => {
     try {
+        console.log(`req -> ${req}`)
         const userToken = req.cookies.userToken
+        console.lop(`userToken -> ${userToken}`)
 
         if (!userToken) return { isAuth: false }
 
         const user = validateUser(userToken)
+        console.log(`user -> ${user}`)
 
         const userExists = await User.findById({_id: user.id})
+        console.log(`userExists -> ${userExists}`)
 
         if (userExists) {
             return { isAuth: true, userId: user.id }
