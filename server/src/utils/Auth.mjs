@@ -20,7 +20,7 @@ const validateUser = token => {
 
 const Auth = async ({ req }) => {
     try {
-        console.log(`req -> ${req}`)
+        console.log(req)
         const userToken = req.cookies.userToken
         console.log(`userToken -> ${userToken}`)
 
