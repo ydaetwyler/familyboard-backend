@@ -1,3 +1,4 @@
+import { AuthenticationError, ApolloError } from 'apollo-server-express'
 import { nanoid } from 'nanoid'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
@@ -15,7 +16,9 @@ const invite = async (args, context, Family, User) => {
     try {
         const { _id, email } = args
 
-        console.log(_id)
+        const checkIfExists = await User.exists({ userEmail: email })
+
+        if (checkIfExists) throw new ApolloError('invite already exists', '91371')
 
         const user = await new User({
             hash: nanoid(),
