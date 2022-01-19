@@ -8,12 +8,17 @@ const SECRET_KEY = process.env.SECRET_KEY
 
 const signUp = async (args, User) => {
     
-    const { email, password, username, userHash, avatarUrl } = args
-    
-    const userEmail = email.trim().toLowerCase()
-    const hashed = await bcrypt.hash(password, 10)
-
     try {
+
+        const { email, password, username, userHash, avatarUrl } = args
+    
+        const userEmail = email.trim().toLowerCase()
+        const hashed = await bcrypt.hash(password, 10)
+
+        const checkIfExists = await User.exists({ userEmail: userEmail })
+
+        if (checkIfExists) throw new ApolloError('signup already exists', '91371')
+
         const overwriteHash = nanoid()
 
         await User.findOneAndUpdate({ hash: userHash }, {
