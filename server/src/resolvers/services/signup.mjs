@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'
+import { AuthenticationError, ApolloError } from 'apollo-server-express'
 
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
