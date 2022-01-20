@@ -16,10 +16,6 @@ const signUp = async (args, User) => {
         const userEmail = email.trim().toLowerCase()
         const hashed = await bcrypt.hash(password, 10)
 
-        const checkIfExists = await User.exists({ userEmail: userEmail })
-
-        if (checkIfExists) throw new ApolloError('signup already exists', '91371')
-
         const overwriteHash = nanoid()
 
         await User.findOneAndUpdate({ hash: userHash }, {

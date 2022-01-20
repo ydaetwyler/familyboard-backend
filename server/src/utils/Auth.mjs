@@ -21,8 +21,6 @@ const validateUser = token => {
 const Auth = async ({ req }) => {
     try {
         const userToken = req.cookies.userToken
-        console.log(userToken)
-        console.log(req)
 
         if (!userToken) return { isAuth: false }
 
