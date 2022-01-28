@@ -6,7 +6,7 @@ dotenv.config()
 const Pass = process.env.PASSWORD
 
 const algorithm = 'aes-256-ctr'
-const secretKey = 'cJiDmYEueJqMvoJoe!cBe_J_rGcQM8C*'
+const secretKey = Pass
 const iv = crypto.randomBytes(16)
 
 export const encrypt = (text) => {
