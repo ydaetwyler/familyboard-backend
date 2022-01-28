@@ -1,21 +1,22 @@
 import { AuthenticationError } from 'apollo-server-express'
 
 const createEventItem = async (args, context, EventItem, User, Family) => {
-    const { 
-        activityName,
-        activityImageUrl,
-        activityDate,
-        activityDescription,
-        activityLocation,
-        activityAddress,
-        activityUrl
-    } = args
     
     if (!context.isAuth) {
         throw new AuthenticationError('Login necessary')
     }
     
     try {
+        const { 
+            activityName,
+            activityImageUrl,
+            activityDate,
+            activityDescription,
+            activityLocation,
+            activityAddress,
+            activityUrl
+        } = args
+
         const user = await User.findById({ _id: context.userId })
 
         const familyId = await user.family

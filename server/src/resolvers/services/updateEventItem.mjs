@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
 
 const updateEventItem = async (args, context, EventItem, User, Family) => {
     if (!context.isAuth) {
@@ -16,6 +16,13 @@ const updateEventItem = async (args, context, EventItem, User, Family) => {
             activityAddress,
             activityUrl
         } = args
+
+        const userFamily = await Family.findById({ _id: context.familyId })
+            .populate('eventList')
+
+        if (!userFamily.eventList) throw new ForbiddenError('Forbidden')
+
+        if (!userFamily.eventList.some(event => event.id === _id)) throw new ForbiddenError('Forbidden')
     
         const eventItemBefore = await EventItem.findById({ _id: _id })
 

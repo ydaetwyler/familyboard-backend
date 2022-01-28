@@ -6,7 +6,7 @@ const getFamily = async (context, User) => {
     }
     
     try {
-        const user = await User.findById({ _id: context.userId })
+        const user = await User.findById({ _id: context.userId }, {'_id': 0})
 
         return user
     } catch (e) {

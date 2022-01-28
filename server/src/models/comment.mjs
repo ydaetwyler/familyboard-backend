@@ -13,6 +13,11 @@ const commentSchema = new Schema(
             ref: 'user',
             required: true,
         },
+        familyId: {
+            type: Schema.Types.ObjectId,
+            ref: 'family',
+            required: true,
+        }
     },
     { timestamps: true }
 )

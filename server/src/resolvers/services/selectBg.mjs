@@ -1,16 +1,15 @@
 import { AuthenticationError } from 'apollo-server-express'
 
 const selectBg = async (args, context, User) => {
-    const { 
-        selectedBgValue,
-        selectedBgLabel
-    } = args
-    
     if (!context.isAuth) {
         throw new AuthenticationError('Login necessary')
     }
 
     try {
+        const { 
+            selectedBgValue,
+            selectedBgLabel
+        } = args
         
         await User.findByIdAndUpdate({ _id: context.userId }, {
             selectedBgValue: selectedBgValue,
@@ -18,7 +17,7 @@ const selectBg = async (args, context, User) => {
         })
 
     } catch (e) {
-        console.log(`Error updating user name -> ${e}`)
+        console.log(`Error updating user background -> ${e}`)
         throw e
     }
 }

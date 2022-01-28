@@ -20,7 +20,7 @@ const createFamily = async (args, Family, User) => {
         
         const newFamily = await family.save()
 
-        newFamily.familyMembers.push(newUser.id)
+        await newFamily.familyMembers.push(newUser.id)
 
         await newFamily.save()
 

@@ -57,19 +57,19 @@ const resolvers = {
         }, 
         setCoordinates: (_, args, context) => {
             pubsub.publish('COORDINATES_CHANGED', { coordinatesChanged: args }),
-            setCoordinates(args, context, eventItem)
+            setCoordinates(args, context, family, eventItem)
         },
         setWeather: (_, args, context) => {
             pubsub.publish('WEATHER_CHANGED', { weatherChanged: args }),
-            setWeather(args, context, eventItem)
+            setWeather(args, context, family, eventItem)
         },
         removeParticipant: (_, args, context) => {
             pubsub.publish('PARTICIPANTS_CHANGED', { eventParticipantsChanged: args }),
-            removeParticipant(args, context, eventItem)
+            removeParticipant(args, context, family, eventItem)
         },
         addParticipant: (_, args, context) => {
             pubsub.publish('PARTICIPANTS_CHANGED', { eventParticipantsChanged: args }),
-            addParticipant(args, context, eventItem)
+            addParticipant(args, context, family, eventItem)
         },
         checkUserParticipant: (_, args, context) => checkUserParticipant(args, context, eventItem),
         updateEventItem: (_, args, context) => {
@@ -83,20 +83,20 @@ const resolvers = {
         },
         removeEventComment: (_, args, context) => {
             pubsub.publish('EVENT_COMMENTS_CHANGED', { eventCommentsChanged: args }),
-            removeEventComment(args, context, comment, eventItem)
+            removeEventComment(args, context, family, comment, eventItem)
         },
         removeNotifications: (_, args, context) => {
-            removeNotifications(args, context, eventItem)
+            removeNotifications(args, context, family, eventItem)
         },
     },
     Query: {
         getFamily: (_, __, context) => getFamily(context, user, family),
         getUser: (_, __, context) => getUser(context, user),
-        getEventItem: (_, args, context) => getEventItem(args, context, eventItem),
-        getEventParticipants: (_, args, context) => getEventParticipants(args, context, eventItem),
-        getWeather: (_, args, context) => getWeather(args, context, eventItem),
-        getCoordinates: (_, args, context) => getCoordinates(args, context, eventItem),
-        getEventComments: (_, args, context) => getEventComments(args, context, eventItem),
+        getEventItem: (_, args, context) => getEventItem(args, context, family, eventItem),
+        getEventParticipants: (_, args, context) => getEventParticipants(args, context, family, eventItem),
+        getWeather: (_, args, context) => getWeather(args, context, family, eventItem),
+        getCoordinates: (_, args, context) => getCoordinates(args, context, family, eventItem),
+        getEventComments: (_, args, context) => getEventComments(args, context, family, eventItem),
         getEventComment: (_, args, context) => getEventComment(args, context, comment),
         checkCommentOwner: (_, args, context) => checkCommentOwner(args, context, comment),
     },

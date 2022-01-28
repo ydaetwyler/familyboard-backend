@@ -1,5 +1,4 @@
 import { AuthenticationError } from 'apollo-server-express'
-import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'

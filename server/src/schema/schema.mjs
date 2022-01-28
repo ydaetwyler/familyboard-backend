@@ -98,7 +98,6 @@ const typeDefs = gql`
 
     "One user"
     type User {
-        _id: ID
         userEmail: String
         userName: String
         password: String
@@ -182,6 +181,7 @@ const typeDefs = gql`
         commentText: String
         commentOwner: User
         createdAt: Date
+        familyId: Family
     }
 `
 

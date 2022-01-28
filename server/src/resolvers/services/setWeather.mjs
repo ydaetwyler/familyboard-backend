@@ -1,6 +1,6 @@
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
 
-const setWeather = async (args, context, EventItem) => {
+const setWeather = async (args, context, Family, EventItem) => {
     if (!context.isAuth) {
         throw new AuthenticationError('Login necessary')
     }
@@ -16,6 +16,13 @@ const setWeather = async (args, context, EventItem) => {
             activityWeatherSunset,
             activityWeatherWind,
         } = args
+
+        const userFamily = await Family.findById({ _id: context.familyId })
+            .populate('eventList')
+
+        if (!userFamily.eventList) throw new ForbiddenError('Forbidden')
+
+        if (!userFamily.eventList.some(event => event.id === _id)) throw new ForbiddenError('Forbidden')
 
         const updateEventItem = await EventItem.findByIdAndUpdate({ _id }, { 
             activityApiLastCall: activityApiLastCall,

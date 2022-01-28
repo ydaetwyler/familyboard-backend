@@ -1,4 +1,4 @@
-import { AuthenticationError, ApolloError } from 'apollo-server-express'
+import { AuthenticationError, ApolloError, ForbiddenError } from 'apollo-server-express'
 import { nanoid } from 'nanoid'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
@@ -16,6 +16,11 @@ const invite = async (args, context, Family, User) => {
     try {
         const { _id, email } = args
 
+        const requestFamilyId = _id.toString()
+        const userFamilyId = context.familyId.toString()
+
+        if (requestFamilyId !== userFamilyId) throw new ForbiddenError('Forbidden')
+
         const checkIfExists = await User.exists({ userEmail: email })
 
         if (checkIfExists) throw new ApolloError('invite already exists', '91371')
@@ -32,7 +37,7 @@ const invite = async (args, context, Family, User) => {
         
         let updateFamily = await Family.findById({ _id })
 
-        updateFamily.familyMembers.push(newUser.id)
+        await updateFamily.familyMembers.push(newUser.id)
 
         await updateFamily.save()
 
@@ -65,6 +70,7 @@ const invite = async (args, context, Family, User) => {
         transport.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(`Error sending invitation mail -> ${error}`)
+                throw new ApolloError('Could not send invitation mail', '7600')
             } 
         })
 

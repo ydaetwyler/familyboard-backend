@@ -29,7 +29,7 @@ const Auth = async ({ req }) => {
         const userExists = await User.findById({_id: user.id})
 
         if (userExists) {
-            return { isAuth: true, userId: user.id }
+            return { isAuth: true, userId: user.id, familyId: userExists.family }
         }
     } catch(e) {
         console.log(`error auth -> ${e}`)

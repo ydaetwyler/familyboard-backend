@@ -1,4 +1,4 @@
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
 
 const createEventComment = async (args, context, Comment, EventItem, User, Family) => {
     if (!context.isAuth) {
@@ -11,9 +11,17 @@ const createEventComment = async (args, context, Comment, EventItem, User, Famil
             commentText
         } = args
 
+        const userFamily = await Family.findById({ _id: context.familyId })
+            .populate('eventList')
+
+        if (!userFamily.eventList) throw new ForbiddenError('Forbidden')
+
+        if (!userFamily.eventList.some(event => event.id === _id)) throw new ForbiddenError('Forbidden')
+
         const comment = await new Comment({
             commentText,
-            commentOwner: context.userId
+            commentOwner: context.userId,
+            familyId: context.familyId
         })
 
         await comment.save()
