@@ -1,10 +1,10 @@
-import { AuthenticationError } from 'apollo-server-express'
+import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
 
-const removeNotifications = async (args, context, Family, EventItem) => {
+const removeNotifications = async (args, context, Family, EventItem) => {    
     if (!context.isAuth) {
         throw new AuthenticationError('Login necessary')
     }
-    
+
     try {
         const { eventId } = args
 
@@ -22,7 +22,7 @@ const removeNotifications = async (args, context, Family, EventItem) => {
             }
         })
     } catch (e) {
-        console.log(`Error fetching event comments, -> ${e}`)
+        console.log(`Error removing notifications on event, -> ${e}`)
         throw e
     }
 }
