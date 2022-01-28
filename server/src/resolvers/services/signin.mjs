@@ -1,7 +1,10 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
 import { AuthenticationError } from 'apollo-server-express'
+import { encrypt } from '../../utils/crypto.mjs'
 
+dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
 
 const signIn = async (args, User) => {
@@ -31,7 +34,9 @@ const signIn = async (args, User) => {
             SECRET_KEY,
             )
 
-            return token
+            const hash = encrypt(token)
+
+            return JSON.stringify(hash)
         }
     } catch(e) {
         console.log(`Error signin -> ${e}`)

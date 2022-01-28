@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'
 import { AuthenticationError, ApolloError } from 'apollo-server-express'
+import { encrypt } from '../../utils/crypto.mjs'
 
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
@@ -36,8 +37,10 @@ const signUp = async (args, User) => {
         },
         SECRET_KEY,
         )
+
+        const hash = encrypt(token)
         
-        return token
+        return JSON.stringify(hash)
     } catch (e) {
         throw new AuthenticationError('User hash invalid')
     }
