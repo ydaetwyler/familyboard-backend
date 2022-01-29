@@ -7,6 +7,7 @@ import { createServer } from 'http'
 import { execute, subscribe } from 'graphql'
 import { SubscriptionServer } from 'subscriptions-transport-ws'
 import { makeExecutableSchema } from '@graphql-tools/schema'
+import cors from 'cors'
 
 import typeDefs from './schema/schema.mjs'
 import resolvers from './resolvers/resolvers.mjs'
@@ -26,11 +27,11 @@ const frontBaseUrl = process.env.FRONT_BASE_URL
 
 const corsOptions = {
     credentials: true,
-    origin: frontBaseUrl
+    origin: true
 }
 
+app.use(cors(corsOptions))
 app.use(cookieParser())
-app.set('trust proxy', 1)
 
 const httpServer = createServer(app)
 
@@ -65,11 +66,11 @@ const server = new ApolloServer({
         return err;
     },
     cors: corsOptions,
-    context: ({ req, connection }) => {
+    context: ({ req, res, connection }) => {
         if (connection) {
-            return connection.context
+            return [connection.context, { res }]
         } else {
-            return Auth({ req })
+            return [Auth({ req }), { res }]
         }
     },
     playground: process.env.NODE_ENV === 'development' ? true : false,

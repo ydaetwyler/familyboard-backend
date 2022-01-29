@@ -1,7 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
-import { decrypt } from './crypto.mjs'
 import logger from './logger.mjs'
 import { fileURLToPath } from 'url'
 
@@ -27,9 +26,7 @@ const Auth = async ({ req }) => {
 
         if (!userToken) return { isAuth: false }
 
-        const decryptUserToken = await decrypt(JSON.parse(userToken))
-
-        const user = validateUser(decryptUserToken)
+        const user = validateUser(userToken)
 
         const userExists = await User.findById({_id: user.id})
 

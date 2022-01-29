@@ -3,7 +3,7 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const getFamily = async (context, User, Family) => {
-    if (!context.isAuth) {
+    if (!context[0].isAuth) {
         throw new AuthenticationError('Login necessary')
     }
     

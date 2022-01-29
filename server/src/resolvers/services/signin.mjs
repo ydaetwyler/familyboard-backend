@@ -2,14 +2,14 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { AuthenticationError } from 'apollo-server-express'
-import { encrypt } from '../../utils/crypto.mjs'
 import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
+import { sendAccessToken } from '../../utils/setCookie.mjs'
 
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
 
-const signIn = async (args, User) => {
+const signIn = async (args, context, User) => {
     try {
         const { email, password } = args
         const userPassword = password
@@ -30,15 +30,14 @@ const signIn = async (args, User) => {
         if (!match) {
             throw new AuthenticationError('Error signing in')
         } else {
+            // todo: set expire
             const token = jwt.sign({
                 id: userFetched._id,
             },
             SECRET_KEY,
             )
 
-            const hash = encrypt(token)
-
-            return JSON.stringify(hash)
+            sendAccessToken(context[1], token)
         }
     } catch(e) {
         logger({

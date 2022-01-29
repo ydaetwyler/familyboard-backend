@@ -41,7 +41,7 @@ const resolvers = {
     Mutation: {
         createFamily: (_, args) => createFamily(args, family, user),
         signUp: (_, args) => signUp(args, user),
-        signIn: (_, args) => signIn(args, user),
+        signIn: (_, args, context) => signIn(args, context, user),
         lostPassword: (_, args) => lostPassword(args, user),
         resetPassword: (_, args) => resetPassword(args, user),
         updateFamily: (_, args, context) => {

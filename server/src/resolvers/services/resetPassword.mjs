@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'
 import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
+import { sendAccessToken } from '../../utils/setCookie.mjs'
 
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
@@ -27,7 +28,7 @@ const resetPassword = async (args, User) => {
         SECRET_KEY,
         )
 
-        return token
+        sendAccessToken(token)
     } catch (e) {
         logger({
             file: fileURLToPath(import.meta.url),
