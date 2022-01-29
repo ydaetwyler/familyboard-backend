@@ -2,6 +2,8 @@ import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
@@ -27,7 +29,11 @@ const resetPassword = async (args, User) => {
 
         return token
     } catch (e) {
-        console.log(`Error reset password -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error reset password',
+            errorObject: e
+        })
         throw e
     }
 }

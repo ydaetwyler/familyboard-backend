@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const updateFamily = async (args, context, User, Family) => {
     const { 
@@ -22,7 +24,11 @@ const updateFamily = async (args, context, User, Family) => {
     
         return updateFamily
     } catch(e) {
-        console.log(`Error updating family name -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error updating family item',
+            errorObject: e
+        })
         throw e
     }
 }

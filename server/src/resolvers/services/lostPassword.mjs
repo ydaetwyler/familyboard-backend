@@ -1,6 +1,8 @@
 import { AuthenticationError } from 'apollo-server-express'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 const FRONT_BASE_URL = process.env.FRONT_BASE_URL
@@ -47,7 +49,11 @@ const lostPassword = async (args, User) => {
 
         return true
     } catch(e) {
-        console.log(`Error signin -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error sending pw reset link',
+            errorObject: e
+        })
         throw e
     }
 }

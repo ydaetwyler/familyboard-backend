@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const updateUser = async (args, context, User) => {
     const { 
@@ -18,7 +20,11 @@ const updateUser = async (args, context, User) => {
     
         return newUser
     } catch (e) {
-        console.log(`Error updating user name -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error updating user item',
+            errorObject: e
+        })
         throw e
     }
 }

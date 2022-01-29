@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const getFamily = async (context, User, Family) => {
     if (!context.isAuth) {
@@ -20,7 +22,11 @@ const getFamily = async (context, User, Family) => {
 
         return familyFetched
     } catch (e) {
-        console.log(`Error fetching family, -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error fetching family',
+            errorObject: e
+        })
         throw e
     }
 }

@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const checkUserParticipant = async (args, context, EventItem) => {
     if (!context.isAuth) {
@@ -19,7 +21,11 @@ const checkUserParticipant = async (args, context, EventItem) => {
 
         return isParticipant
     } catch (e) {
-        console.log(`Error checking user is participant, -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error checking user is participant',
+            errorObject: e
+        })
         throw e
     }
 }

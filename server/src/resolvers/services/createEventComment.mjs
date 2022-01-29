@@ -1,4 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const createEventComment = async (args, context, Comment, EventItem, User, Family) => {
     if (!context.isAuth) {
@@ -46,7 +48,11 @@ const createEventComment = async (args, context, Comment, EventItem, User, Famil
         })
         
     } catch (e) {
-        console.log(`Error creating event comment -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error creating event comment',
+            errorObject: e
+        })
         throw e
     }
 }

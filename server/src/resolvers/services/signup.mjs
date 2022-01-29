@@ -4,6 +4,8 @@ import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'
 import { AuthenticationError, ApolloError } from 'apollo-server-express'
 import { encrypt } from '../../utils/crypto.mjs'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
@@ -42,7 +44,11 @@ const signUp = async (args, User) => {
         
         return JSON.stringify(hash)
     } catch (e) {
-        throw new AuthenticationError('User hash invalid')
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error signup',
+            errorObject: e
+        })
     }
 }
 

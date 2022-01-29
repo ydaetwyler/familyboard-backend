@@ -1,4 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const updateEventItem = async (args, context, EventItem, User, Family) => {
     if (!context.isAuth) {
@@ -99,7 +101,11 @@ const updateEventItem = async (args, context, EventItem, User, Family) => {
             activityUpdateUsers: familyMembers
         })
     } catch(e) {
-        console.log(`Error updating event item -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error updating event item',
+            errorObject: e
+        })
         throw e
     }
 }

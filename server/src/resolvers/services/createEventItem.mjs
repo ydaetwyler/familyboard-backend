@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const createEventItem = async (args, context, EventItem, User, Family) => {
     
@@ -46,7 +48,11 @@ const createEventItem = async (args, context, EventItem, User, Family) => {
             }
         })
     } catch (e) {
-        console.log(`Error creating Event -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error creating Event',
+            errorObject: e
+        })
         throw e
     }
 }

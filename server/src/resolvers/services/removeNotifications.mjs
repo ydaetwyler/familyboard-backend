@@ -1,4 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const removeNotifications = async (args, context, Family, EventItem) => {    
     if (!context.isAuth) {
@@ -22,7 +24,11 @@ const removeNotifications = async (args, context, Family, EventItem) => {
             }
         })
     } catch (e) {
-        console.log(`Error removing notifications on event, -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error removing notifications on event',
+            errorObject: e
+        })
         throw e
     }
 }

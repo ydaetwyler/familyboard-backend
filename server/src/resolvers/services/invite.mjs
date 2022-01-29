@@ -2,6 +2,8 @@ import { AuthenticationError, ApolloError, ForbiddenError } from 'apollo-server-
 import { nanoid } from 'nanoid'
 import dotenv from 'dotenv'
 import nodemailer from 'nodemailer'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 dotenv.config()
 
@@ -75,7 +77,11 @@ const invite = async (args, context, Family, User) => {
         })
 
     } catch (e) {
-        console.log(`Error inviting User -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error inviting User',
+            errorObject: e
+        })
         throw e
     }
 }

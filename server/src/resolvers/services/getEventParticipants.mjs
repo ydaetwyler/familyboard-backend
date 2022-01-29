@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const getEventParticipants = async (args, context, Family, EventItem) => {
     if (!context.isAuth) {
@@ -20,7 +22,11 @@ const getEventParticipants = async (args, context, Family, EventItem) => {
 
         return eventItemFetched
     } catch (e) {
-        console.log(`Error fetching event item, -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error getting event participants',
+            errorObject: e
+        })
         throw e
     }
 }

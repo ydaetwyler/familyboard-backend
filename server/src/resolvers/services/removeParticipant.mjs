@@ -1,4 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const removeParticipant = async (args, context, Family, EventItem) => {
     if (!context.isAuth) {
@@ -21,7 +23,11 @@ const removeParticipant = async (args, context, Family, EventItem) => {
             }
         })
     } catch (e) {
-        console.log(`Error updating user name -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error updating user name',
+            errorObject: e
+        })
         throw e
     }
 }

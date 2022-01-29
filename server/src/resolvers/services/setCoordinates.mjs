@@ -1,4 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const setCoordinates = async (args, context, Family, EventItem) => {
     if (!context.isAuth) {
@@ -33,7 +35,11 @@ const setCoordinates = async (args, context, Family, EventItem) => {
     
 
     } catch(e) {
-        console.log(`Error updating event item -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error setting event coordinates',
+            errorObject: e
+        })
         throw e
     }
 }

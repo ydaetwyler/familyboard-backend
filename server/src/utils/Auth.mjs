@@ -2,6 +2,8 @@ import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
 import { decrypt } from './crypto.mjs'
+import logger from './logger.mjs'
+import { fileURLToPath } from 'url'
 
 import User from '../models/user.mjs'
 
@@ -37,7 +39,11 @@ const Auth = async ({ req }) => {
             return { isAuth: false }
         }
     } catch(e) {
-        console.log(`error auth -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error authentication',
+            errorObject: e
+        })
     }
 }
 

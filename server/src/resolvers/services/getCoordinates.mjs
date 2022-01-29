@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const getCoordinates = async (args, context, Family, EventItem) => {
     if (!context.isAuth) {
@@ -19,7 +21,11 @@ const getCoordinates = async (args, context, Family, EventItem) => {
 
         return eventItemFetched
     } catch (e) {
-        console.log(`Error fetching event item, -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error fetching event item',
+            errorObject: e
+        })
         throw e
     }
 }

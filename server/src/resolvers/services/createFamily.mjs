@@ -1,4 +1,6 @@
 import { nanoid } from 'nanoid'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const createFamily = async (args, Family, User) => {    
     try {
@@ -32,7 +34,11 @@ const createFamily = async (args, Family, User) => {
 
         return user.hash
     } catch (e) {
-        console.log(`Error creating Family -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error creating Family',
+            errorObject: e
+        })
         throw e
     }
 }

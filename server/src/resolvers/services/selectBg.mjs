@@ -1,4 +1,6 @@
 import { AuthenticationError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const selectBg = async (args, context, User) => {
     if (!context.isAuth) {
@@ -17,7 +19,11 @@ const selectBg = async (args, context, User) => {
         })
 
     } catch (e) {
-        console.log(`Error updating user background -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error updating user background',
+            errorObject: e
+        })
         throw e
     }
 }

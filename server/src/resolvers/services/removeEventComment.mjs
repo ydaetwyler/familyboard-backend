@@ -1,4 +1,6 @@
 import { AuthenticationError, ForbiddenError } from 'apollo-server-express'
+import logger from '../../utils/logger.mjs'
+import { fileURLToPath } from 'url'
 
 const removeEventComment = async (args, context, Family, Comment, EventItem) => {
     if (!context.isAuth) {
@@ -31,7 +33,11 @@ const removeEventComment = async (args, context, Family, Comment, EventItem) => 
         })
 
     } catch(e) {
-        console.log(`Error removing event comment -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error removing event comment',
+            errorObject: e
+        })
         throw e
     }
 }
