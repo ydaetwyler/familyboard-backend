@@ -10,7 +10,12 @@ const connect = () => {
             useNewUrlParser: true
         })
     } catch (e) {
-        console.log(e)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error DB connection',
+            errorObject: e
+        })
+        throw e
     }
 }
 

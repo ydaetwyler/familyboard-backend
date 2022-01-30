@@ -45,7 +45,7 @@ const AuthSubscription = async webSocket => {
             message: 'Error authentication ws',
             errorObject: e
         })
-        throw new AuthenticationError('Session invalid')
+        throw e
     }
 }
 

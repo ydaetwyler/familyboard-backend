@@ -41,7 +41,7 @@ const Auth = async ({ req }) => {
             message: 'Error authentication http',
             errorObject: e
         })
-        throw new AuthenticationError('Session invalid')
+        throw e
     }
 }
 

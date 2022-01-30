@@ -45,6 +45,7 @@ const signUp = async (args, context, User) => {
             message: 'Error signup',
             errorObject: e
         })
+        throw e
     }
 }
 
