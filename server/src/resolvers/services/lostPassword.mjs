@@ -43,7 +43,11 @@ const lostPassword = async (args, User) => {
 
         transport.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log(`Error sending pw reset mail -> ${error}`)
+                logger({
+                    file: fileURLToPath(import.meta.url),
+                    message: 'Error sending pw reset mail',
+                    errorObject: error
+                })
             } 
         })
 

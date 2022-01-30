@@ -73,7 +73,11 @@ const invite = async (args, context, Family, User) => {
 
         transport.sendMail(mailOptions, (error, info) => {
             if (error) {
-                console.log(`Error sending invitation mail -> ${error}`)
+                logger({
+                    file: fileURLToPath(import.meta.url),
+                    message: 'Error sending invitaion mail',
+                    errorObject: error
+                })
                 throw new ApolloError('Could not send invitation mail', '7600')
             } 
         })
