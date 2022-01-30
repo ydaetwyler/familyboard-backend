@@ -38,7 +38,7 @@ const Auth = async ({ req }) => {
     } catch(e) {
         logger({
             file: fileURLToPath(import.meta.url),
-            message: 'Error authentication',
+            message: 'Error authentication http',
             errorObject: e
         })
         throw new AuthenticationError('Session invalid')

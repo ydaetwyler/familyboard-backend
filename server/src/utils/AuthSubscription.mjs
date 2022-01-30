@@ -1,6 +1,8 @@
 import { AuthenticationError } from 'apollo-server-express'
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import logger from './logger.mjs'
+import { fileURLToPath } from 'url'
 
 import getCookie from './getCookie.mjs'
 
@@ -22,7 +24,6 @@ const validateUser = token => {
 
 const AuthSubscription = async webSocket => {
     try {
-        
         const cookies = webSocket.upgradeReq.headers.cookie
 
         const userToken = getCookie(cookies, 'userToken')
@@ -34,10 +35,17 @@ const AuthSubscription = async webSocket => {
         const userExists = await User.findById({_id: user.id})
 
         if (userExists) {
-            return { isAuth: true, userId: user.id }
+            return { isAuth: true, userId: user.id, familyId: userExists.family }
+        } else {
+            return { isAuth: false }
         }
     } catch(e) {
-        console.log(`error auth -> ${e}`)
+        logger({
+            file: fileURLToPath(import.meta.url),
+            message: 'Error authentication ws',
+            errorObject: e
+        })
+        throw new AuthenticationError('Session invalid')
     }
 }
 
