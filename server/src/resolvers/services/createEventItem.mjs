@@ -29,6 +29,10 @@ const createEventItem = async (args, context, EventItem, User, Family) => {
 
         await familyMembers.pull(contextReturn.userId)
 
+        // Set minus 6 hours so it will be called in the frontend
+        let callApi = new Date(Date.now())
+        callApi.setHours(callApi.getHours() - 6)
+
         const eventItem = await new EventItem({
             activityName,
             activityImageUrl,
@@ -38,6 +42,7 @@ const createEventItem = async (args, context, EventItem, User, Family) => {
             activityLocation,
             activityAddress,
             activityUrl,
+            activityApiLastCall: callApi,
             activityUpdateUsers: familyMembers
         })
 

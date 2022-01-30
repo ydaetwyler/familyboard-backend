@@ -9,7 +9,8 @@ export const sendAccessToken = async ({ res }, token) => {
         httpOnly: true,
         sameSite: true,
         secure: false,
-        maxAge: (60*60*24),
+        maxAge: 86400000,
+        expires: new Date(Date.now() + 86400),
         path: "/",
         domain: (process.env.NODE_ENV == 'development') ? "localhost" : "family-board.ch",
     })
