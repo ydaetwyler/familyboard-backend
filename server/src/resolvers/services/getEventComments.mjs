@@ -3,14 +3,16 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const getEventComments = async (args, context, Family, EventItem) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { _id } = args
 
-        const userFamily = await Family.findById({ _id: context.familyId })
+        const userFamily = await Family.findById({ _id: contextReturn.familyId })
             .populate('eventList')
 
         if (!userFamily.eventList) throw new ForbiddenError('Forbidden')

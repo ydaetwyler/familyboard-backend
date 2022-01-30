@@ -40,65 +40,65 @@ import checkCommentOwner from './services/checkCommentOwner.mjs'
 const resolvers = {
     Mutation: {
         createFamily: (_, args) => createFamily(args, family, user),
-        signUp: (_, args) => signUp(args, user),
+        signUp: (_, args, context) => signUp(args, context, user),
         signIn: (_, args, context) => signIn(args, context, user),
         lostPassword: (_, args) => lostPassword(args, user),
-        resetPassword: (_, args) => resetPassword(args, user),
+        resetPassword: (_, args, context) => resetPassword(args, context, user),
         updateFamily: (_, args, context) => {
             pubsub.publish('FAMILY_CHANGED', { familyChanged: args })
-            updateFamily(args, context, user, family)
+            updateFamily(args, context[0], user, family)
         },
-        updateUser: (_, args, context) => updateUser(args, context, user),
-        selectBg: (_, args, context) => selectBg(args, context, user),
-        invite: (_, args, context) => invite(args, context, family, user),
+        updateUser: (_, args, context) => updateUser(args, context[0], user),
+        selectBg: (_, args, context) => selectBg(args, context[0], user),
+        invite: (_, args, context) => invite(args, context[0], family, user),
         createEventItem: (_, args, context) => {
             pubsub.publish('EVENT_ITEM_CREATED', { eventItemCreated: args }),
-            createEventItem(args, context, eventItem, user, family)
+            createEventItem(args, context[0], eventItem, user, family)
         }, 
         setCoordinates: (_, args, context) => {
             pubsub.publish('COORDINATES_CHANGED', { coordinatesChanged: args }),
-            setCoordinates(args, context, family, eventItem)
+            setCoordinates(args, context[0], family, eventItem)
         },
         setWeather: (_, args, context) => {
             pubsub.publish('WEATHER_CHANGED', { weatherChanged: args }),
-            setWeather(args, context, family, eventItem)
+            setWeather(args, context[0], family, eventItem)
         },
         removeParticipant: (_, args, context) => {
             pubsub.publish('PARTICIPANTS_CHANGED', { eventParticipantsChanged: args }),
-            removeParticipant(args, context, family, eventItem)
+            removeParticipant(args, context[0], family, eventItem)
         },
         addParticipant: (_, args, context) => {
             pubsub.publish('PARTICIPANTS_CHANGED', { eventParticipantsChanged: args }),
-            addParticipant(args, context, family, eventItem)
+            addParticipant(args, context[0], family, eventItem)
         },
-        checkUserParticipant: (_, args, context) => checkUserParticipant(args, context, eventItem),
+        checkUserParticipant: (_, args, context) => checkUserParticipant(args, context[0], eventItem),
         updateEventItem: (_, args, context) => {
             pubsub.publish('EVENT_ITEM_CHANGED', { eventItemChanged: args }),
-            updateEventItem(args, context, eventItem, user, family)
+            updateEventItem(args, context[0], eventItem, user, family)
         },
-        removeEventItem: (_, args, context) => removeEventItem(args, context, eventItem, family),
+        removeEventItem: (_, args, context) => removeEventItem(args, context[0], eventItem, family),
         createEventComment: (_, args, context) => {
             pubsub.publish('EVENT_COMMENTS_CHANGED', { eventCommentsChanged: args }),
-            createEventComment(args, context, comment, eventItem, user, family)
+            createEventComment(args, context[0], comment, eventItem, user, family)
         },
         removeEventComment: (_, args, context) => {
             pubsub.publish('EVENT_COMMENTS_CHANGED', { eventCommentsChanged: args }),
-            removeEventComment(args, context, family, comment, eventItem)
+            removeEventComment(args, context[0], family, comment, eventItem)
         },
         removeNotifications: (_, args, context) => {
-            removeNotifications(args, context, family, eventItem)
+            removeNotifications(args, context[0], family, eventItem)
         },
     },
     Query: {
-        getFamily: (_, __, context) => getFamily(context, user, family),
-        getUser: (_, __, context) => getUser(context, user),
-        getEventItem: (_, args, context) => getEventItem(args, context, family, eventItem),
-        getEventParticipants: (_, args, context) => getEventParticipants(args, context, family, eventItem),
-        getWeather: (_, args, context) => getWeather(args, context, family, eventItem),
-        getCoordinates: (_, args, context) => getCoordinates(args, context, family, eventItem),
-        getEventComments: (_, args, context) => getEventComments(args, context, family, eventItem),
-        getEventComment: (_, args, context) => getEventComment(args, context, comment),
-        checkCommentOwner: (_, args, context) => checkCommentOwner(args, context, comment),
+        getFamily: (_, __, context) => getFamily(context[0], user, family),
+        getUser: (_, __, context) => getUser(context[0], user),
+        getEventItem: (_, args, context) => getEventItem(args, context[0], family, eventItem),
+        getEventParticipants: (_, args, context) => getEventParticipants(args, context[0], family, eventItem),
+        getWeather: (_, args, context) => getWeather(args, context[0], family, eventItem),
+        getCoordinates: (_, args, context) => getCoordinates(args, context[0], family, eventItem),
+        getEventComments: (_, args, context) => getEventComments(args, context[0], family, eventItem),
+        getEventComment: (_, args, context) => getEventComment(args, context[0], comment),
+        checkCommentOwner: (_, args, context) => checkCommentOwner(args, context[0], comment),
     },
     Subscription: {
         familyChanged: {

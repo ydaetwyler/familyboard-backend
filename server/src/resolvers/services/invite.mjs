@@ -10,16 +10,18 @@ dotenv.config()
 const frontBaseUrl = process.env.FRONT_BASE_URL
 const mailPw = process.env.MAIL_PW
 
-const invite = async (args, context, Family, User) => {  
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
+const invite = async (args, context, Family, User) => {      
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { _id, email } = args
 
         const requestFamilyId = _id.toString()
-        const userFamilyId = context.familyId.toString()
+        const userFamilyId = contextReturn.familyId.toString()
 
         if (requestFamilyId !== userFamilyId) throw new ForbiddenError('Forbidden')
 
@@ -59,7 +61,7 @@ const invite = async (args, context, Family, User) => {
             },
         })
 
-        const currentUser = await User.findById({ _id: context.userId })
+        const currentUser = await User.findById({ _id: contextReturn.userId })
         const senderEmail = currentUser.userEmail
 
         const mailOptions = {

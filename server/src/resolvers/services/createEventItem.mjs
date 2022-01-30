@@ -3,12 +3,13 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const createEventItem = async (args, context, EventItem, User, Family) => {
-    
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { 
             activityName,
             activityImageUrl,
@@ -19,14 +20,14 @@ const createEventItem = async (args, context, EventItem, User, Family) => {
             activityUrl
         } = args
 
-        const user = await User.findById({ _id: context.userId })
+        const user = await User.findById({ _id: contextReturn.userId })
 
         const familyId = await user.family
 
         const familyFetched = await Family.findById({ _id: familyId })
         const familyMembers = familyFetched.familyMembers
 
-        await familyMembers.pull(context.userId)
+        await familyMembers.pull(contextReturn.userId)
 
         const eventItem = await new EventItem({
             activityName,

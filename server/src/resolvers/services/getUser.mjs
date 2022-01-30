@@ -2,13 +2,15 @@ import { AuthenticationError } from 'apollo-server-express'
 import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
-const getFamily = async (context, User) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
+const getUser = async (context, User) => {
     try {
-        const user = await User.findById({ _id: context.userId }, {'_id': 0})
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
+        const user = await User.findById({ _id: contextReturn.userId }, {'_id': 0})
 
         return user
     } catch (e) {
@@ -21,4 +23,4 @@ const getFamily = async (context, User) => {
     }
 }
 
-export default getFamily
+export default getUser

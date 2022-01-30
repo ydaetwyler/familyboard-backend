@@ -3,14 +3,16 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const getEventItem = async (args, context, Family, EventItem) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { _id } = args
 
-        const userFamily = await Family.findById({ _id: context.familyId })
+        const userFamily = await Family.findById({ _id: contextReturn.familyId })
             .populate('eventList')
 
         if (!userFamily.eventList) throw new ForbiddenError('Forbidden')
@@ -23,15 +25,15 @@ const getEventItem = async (args, context, Family, EventItem) => {
             .populate('activityUpdateUsers')
             .populate('activityNewCommentUsers')
 
-        eventItemFetched.activityParticipantsList.some(user => user.id === context.userId)
+        eventItemFetched.activityParticipantsList.some(user => user.id === contextReturn.userId)
         ? eventItemFetched.userJoined = true
         : eventItemFetched.userJoined = false
 
-        eventItemFetched.activityUpdateUsers.some(user => user.id === context.userId)
+        eventItemFetched.activityUpdateUsers.some(user => user.id === contextReturn.userId)
         ? eventItemFetched.updated = true
         : eventItemFetched.updated = false
 
-        eventItemFetched.activityNewCommentUsers.some(user => user.id === context.userId)
+        eventItemFetched.activityNewCommentUsers.some(user => user.id === contextReturn.userId)
         ? eventItemFetched.newComment = true
         : eventItemFetched.newComment = false
 

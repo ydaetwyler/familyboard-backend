@@ -3,14 +3,16 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const removeEventComment = async (args, context, Family, Comment, EventItem) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { commentId, _id } = args
 
-        const userFamily = await Family.findById({ _id: context.familyId })
+        const userFamily = await Family.findById({ _id: contextReturn.familyId })
             .populate('eventList')
 
         if (!userFamily.eventList) throw new ForbiddenError('Forbidden')
@@ -20,7 +22,7 @@ const removeEventComment = async (args, context, Family, Comment, EventItem) => 
         const commentToRemove = await Comment.findById({ _id: commentId })
 
         const commentOwnerId = commentToRemove.commentOwner._id.toString()
-        const userId = context.userId.toString()
+        const userId = contextReturn.userId.toString()
 
         if (commentOwnerId !== userId) throw new ForbiddenError('Forbidden')
 

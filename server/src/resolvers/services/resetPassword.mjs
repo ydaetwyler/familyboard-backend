@@ -9,7 +9,7 @@ import { sendAccessToken } from '../../utils/setCookie.mjs'
 dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
 
-const resetPassword = async (args, User) => {
+const resetPassword = async (args, context, User) => {
     try {
         const { password, userHash } = args
 
@@ -25,10 +25,10 @@ const resetPassword = async (args, User) => {
         const token = jwt.sign({
             id: resetUser._id,
         },
-        SECRET_KEY,
+        SECRET_KEY, { expiresIn: '24h' }
         )
 
-        sendAccessToken(token)
+        sendAccessToken(context[1], token)
     } catch (e) {
         logger({
             file: fileURLToPath(import.meta.url),

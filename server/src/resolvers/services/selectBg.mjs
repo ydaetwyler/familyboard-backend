@@ -3,17 +3,19 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const selectBg = async (args, context, User) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+        
         const { 
             selectedBgValue,
             selectedBgLabel
         } = args
         
-        await User.findByIdAndUpdate({ _id: context.userId }, {
+        await User.findByIdAndUpdate({ _id: contextReturn.userId }, {
             selectedBgValue: selectedBgValue,
             selectedBgLabel: selectedBgLabel
         })

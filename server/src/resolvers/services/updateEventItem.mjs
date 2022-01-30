@@ -3,11 +3,13 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const updateEventItem = async (args, context, EventItem, User, Family) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { 
             _id,
             activityImageUrl,
@@ -19,7 +21,7 @@ const updateEventItem = async (args, context, EventItem, User, Family) => {
             activityUrl
         } = args
 
-        const userFamily = await Family.findById({ _id: context.familyId })
+        const userFamily = await Family.findById({ _id: contextReturn.familyId })
             .populate('eventList')
 
         if (!userFamily.eventList) throw new ForbiddenError('Forbidden')
@@ -88,14 +90,14 @@ const updateEventItem = async (args, context, EventItem, User, Family) => {
             }
         }
 
-        const user = await User.findById({ _id: context.userId })
+        const user = await User.findById({ _id: contextReturn.userId })
 
         const familyId = await user.family
 
         const familyFetched = await Family.findById({ _id: familyId })
         const familyMembers = familyFetched.familyMembers
 
-        await familyMembers.pull(context.userId)
+        await familyMembers.pull(contextReturn.userId)
 
         await EventItem.findByIdAndUpdate({ _id: _id}, {
             activityUpdateUsers: familyMembers

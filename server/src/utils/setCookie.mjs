@@ -4,5 +4,6 @@ export const sendAccessToken = async ({ res }, token) => {
         sameSite: true,
         secure: false,
         maxAge: (60*60*24),
+        path: "/"
     })
 }

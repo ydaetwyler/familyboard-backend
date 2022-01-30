@@ -3,11 +3,13 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const checkUserParticipant = async (args, context, EventItem) => {
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
     try {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
         const { _id } = args
 
         let isParticipant = false
@@ -16,7 +18,7 @@ const checkUserParticipant = async (args, context, EventItem) => {
             .populate('activityParticipantsList')
 
         if (eventItemFetched.activityParticipantsList) {
-            isParticipant = eventItemFetched.activityParticipantsList.some(user => user.id === context.userId)
+            isParticipant = eventItemFetched.activityParticipantsList.some(user => user.id === contextReturn.userId)
         }
 
         return isParticipant

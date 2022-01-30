@@ -22,7 +22,7 @@ const validateUser = token => {
 
 const Auth = async ({ req }) => {
     try {
-        const userToken = req.cookies.userToken
+        const userToken = await req.cookies.userToken
 
         if (!userToken) return { isAuth: false }
 
@@ -41,6 +41,7 @@ const Auth = async ({ req }) => {
             message: 'Error authentication',
             errorObject: e
         })
+        throw new AuthenticationError('Session invalid')
     }
 }
 

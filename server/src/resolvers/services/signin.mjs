@@ -34,7 +34,7 @@ const signIn = async (args, context, User) => {
             const token = jwt.sign({
                 id: userFetched._id,
             },
-            SECRET_KEY,
+            SECRET_KEY, { expiresIn: '24h' }
             )
 
             sendAccessToken(context[1], token)

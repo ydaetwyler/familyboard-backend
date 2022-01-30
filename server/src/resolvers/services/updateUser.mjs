@@ -3,17 +3,19 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const updateUser = async (args, context, User) => {
-    const { 
-        username,
-        avatarUrl
-    } = args
-    
-    if (!context.isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-
     try {
-        const newUser = await User.findByIdAndUpdate({ _id: context.userId }, {
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
+        const { 
+            username,
+            avatarUrl
+        } = args
+
+        const newUser = await User.findByIdAndUpdate({ _id: contextReturn.userId }, {
             userName: username,
             avatarUrl
         })

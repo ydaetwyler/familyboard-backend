@@ -3,12 +3,14 @@ import logger from '../../utils/logger.mjs'
 import { fileURLToPath } from 'url'
 
 const getFamily = async (context, User, Family) => {
-    if (!context[0].isAuth) {
-        throw new AuthenticationError('Login necessary')
-    }
-    
     try {
-        const user = await User.findById({ _id: context.userId })
+        const contextReturn = await context
+
+        if (!contextReturn.isAuth) {
+            throw new AuthenticationError('Login necessary')
+        }
+
+        const user = await User.findById({ _id: contextReturn.userId })
 
         const familyId = user.family
 
